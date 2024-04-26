@@ -11,12 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MusicGenService {
 
     private final AmazonS3Client amazonS3Client;
@@ -36,10 +41,11 @@ public class MusicGenService {
     private String pythonExecutablePath= workingDir + "/myvenv/bin/python3";
 
     public String generateMusic(MusicGenRequest reqDto){
+
         JSONObject jsonObject = createJsonFromRequest(reqDto);
         executePythonScript(jsonObject.toString());
 
-        String musicUrl = uploadFileToS3();
+        String musicUrl = uploadFileToS3(jsonObject.get("date").toString());
         musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(musicUrl)
@@ -53,6 +59,7 @@ public class MusicGenService {
         jsonObject.put("speed", reqDto.speed());
         jsonObject.put("mood", reqDto.mood());
         jsonObject.put("loc", reqDto.loc());
+        jsonObject.put("date", reqDto.date());
         return jsonObject;
     }
 
@@ -88,14 +95,12 @@ public class MusicGenService {
         log.info("Python script exited with code {}", exitCode);
     }
 
-    private String uploadFileToS3() {
+    private String uploadFileToS3(String musicName) {
         // AWS S3 업로드 로직 구현
-        Long id = 1L;
         //TODO : 음악 확장자 확인
-        File uploadFile =  new File(System.getProperty("user.dir") + "/musics/" + "music" + id +".wav");
+        File uploadFile =  new File(System.getProperty("user.dir") + "/musics/" + "music" + musicName +".wav");
 
         String fileName = "music" + "/" + uploadFile.getName(); // S3에 저장된 파일 이름
-        System.out.println("fileName = " + uploadFile);
         String uploadMusicUrl = putS3(uploadFile, fileName); // S3로 업로드
         log.info("uploadImageUrl = " + uploadMusicUrl);
         removeNewFile(uploadFile);
