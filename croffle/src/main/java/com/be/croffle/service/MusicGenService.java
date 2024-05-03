@@ -3,18 +3,28 @@ package com.be.croffle.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.be.croffle.MusicConvert;
 import com.be.croffle.music.Music;
 import com.be.croffle.music.MusicJpaRepository;
 import com.be.croffle.music.dto.MusicGenRequest;
+import com.be.croffle.music.dto.EachMusicResponse;
+import com.be.croffle.music.dto.PlaylistResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -41,9 +51,9 @@ public class MusicGenService {
     public String generateMusic(MusicGenRequest reqDto){
 
         JSONObject jsonObject = createJsonFromRequest(reqDto);
-        executePythonScript(jsonObject.toString());
+        String uuid = executePythonScript(jsonObject.toString());
 
-        String musicUrl = uploadFileToS3(jsonObject.get("date").toString());
+        String musicUrl = uploadFileToS3(uuid);
         musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(musicUrl)
@@ -57,15 +67,14 @@ public class MusicGenService {
         jsonObject.put("speed", reqDto.speed());
         jsonObject.put("mood", reqDto.mood());
         jsonObject.put("loc", reqDto.loc());
-        jsonObject.put("date", reqDto.date());
         return jsonObject;
     }
 
-    private void executePythonScript(String jsonInput){
+    private String executePythonScript(String jsonInput) {
         ProcessBuilder processBuilder = new ProcessBuilder(pythonExecutablePath, scriptPath);
         processBuilder.redirectErrorStream(true);
 
-        try{
+        try {
             Process process = processBuilder.start();
             try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8))) {
                 writer.write(jsonInput);
@@ -74,14 +83,20 @@ public class MusicGenService {
 
             // 성공적으로 실행된 경우, .wav 파일 경로를 반환
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String outputFromPythonScript1 = reader.readLine();
 
             logProcessOutput(reader);
             waitForProcessAndLogExitCode(process);
 
+            return outputFromPythonScript1;
+
         } catch (IOException | InterruptedException e) {
-           e.printStackTrace();
-       }
+            e.printStackTrace();
+        }
+        return null;
     }
+
+
 
     private void logProcessOutput(BufferedReader reader) throws IOException {
         String output = reader.lines().reduce("", (acc, line) -> acc + "\n" + line);
@@ -120,4 +135,5 @@ public class MusicGenService {
             log.info("파일이 삭제되지 못했습니다.");
         }
     }
+
 }
