@@ -76,12 +76,12 @@ public class MusicGenService {
 
             // 성공적으로 실행된 경우, .wav 파일 경로를 반환
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String outputFromPythonScript1 = reader.readLine();
+            String outputFromPythonScript = reader.readLine();
 
             logProcessOutput(reader);
             waitForProcessAndLogExitCode(process);
 
-            return outputFromPythonScript1;
+            return outputFromPythonScript;
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
