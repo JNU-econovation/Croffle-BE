@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -134,6 +132,20 @@ public class MusicGenService {
         } else {
             log.info("파일이 삭제되지 못했습니다.");
         }
+    }
+
+    public PlaylistResponse getPlaylist() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+        Page<Music> page = musicJpaRepository.findAll(pageable);
+
+        List<Music> musicList = page.getContent();
+
+        List<EachMusicResponse> responses = musicList.stream()
+                .map(MusicConvert::convertToEachMusicResponse)
+                .toList();
+
+        return new PlaylistResponse(responses);
     }
 
 }
