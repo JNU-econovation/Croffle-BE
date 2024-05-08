@@ -1,4 +1,4 @@
-package com.be.croffle.service;
+package com.be.croffle.music;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -36,7 +36,7 @@ public class MusicGenService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String workingDir = System.getProperty("user.dir");
+    private final String workingDir = System.getProperty("user.dir");
 
     //TODO : 환경변수화
 
