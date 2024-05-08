@@ -3,13 +3,13 @@ package com.be.croffle.music;
 import com.be.croffle.common.ApiResponseGenerator;
 import com.be.croffle.music.dto.MusicGenRequest;
 import com.be.croffle.music.dto.MusicGenResponse;
+import com.be.croffle.music.dto.EachMusicResponse;
+import com.be.croffle.music.dto.PlaylistResponse;
 import com.be.croffle.service.MusicGenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,4 +28,11 @@ public class MusicGenController {
             return ApiResponseGenerator.fail("Music generation failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/api/playlist")
+    public ResponseEntity<?> getPlaylist() {
+        PlaylistResponse response = musicGenService.getPlaylist();
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+    }
+
 }
