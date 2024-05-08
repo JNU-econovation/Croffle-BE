@@ -3,7 +3,7 @@ package com.be.croffle.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.be.croffle.MusicConvert;
+import com.be.croffle.music.MusicConvert;
 import com.be.croffle.music.Music;
 import com.be.croffle.music.MusicJpaRepository;
 import com.be.croffle.music.dto.MusicGenRequest;

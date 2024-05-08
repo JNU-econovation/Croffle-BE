@@ -1,4 +1,4 @@
-package com.be.croffle;
+package com.be.croffle.music;
 
 import com.be.croffle.music.Music;
 import com.be.croffle.music.dto.EachMusicResponse;
