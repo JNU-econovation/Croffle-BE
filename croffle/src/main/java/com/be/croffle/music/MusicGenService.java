@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -107,12 +109,18 @@ public class MusicGenService {
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
         Page<Music> page = musicJpaRepository.findAll(pageable);
+        Page<Title> title = titleJpaRepository.findAll(pageable);
 
         List<Music> musicList = page.getContent();
+        List<Title> titleList = title.getContent();
 
-        List<EachMusicResponse> responses = musicList.stream()
-                .map(MusicConvert::convertToEachMusicResponse)
+        List<String> musicTitle = titleList.stream()
+                .map(Title::createTitle)
                 .toList();
+
+        List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
+                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), musicTitle.get(index)))
+                .collect(Collectors.toList());
 
         return new PlaylistResponse(responses);
     }
