@@ -1,7 +1,8 @@
 package com.be.croffle.music.dto;
 
 public record EachMusicResponse(
-        Long id,
-        String musicUrl
+        Long musicId,
+        String musicUrl,
+        String title
 ) {
 }
