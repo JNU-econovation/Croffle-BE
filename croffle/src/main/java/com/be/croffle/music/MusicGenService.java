@@ -1,25 +1,20 @@
 package com.be.croffle.music;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.be.croffle.music.MusicConvert;
-import com.be.croffle.music.Music;
-import com.be.croffle.music.MusicJpaRepository;
+
 import com.be.croffle.music.dto.MusicGenRequest;
 import com.be.croffle.music.dto.EachMusicResponse;
 import com.be.croffle.music.dto.PlaylistResponse;
+import com.be.croffle.music.title.Title;
+import com.be.croffle.music.title.TitleJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -30,6 +25,7 @@ import java.util.List;
 @Transactional
 public class MusicGenService {
     private final MusicJpaRepository musicJpaRepository;
+    private final TitleJpaRepository titleJpaRepository;
     private final S3uploader s3uploader;
     private final String workingDir = System.getProperty("user.dir");
 
@@ -50,6 +46,13 @@ public class MusicGenService {
         musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(musicUrl)
+                .build());
+
+        titleJpaRepository.save(Title
+                .builder()
+                .speed(reqDto.speed())
+                .mood(reqDto.mood())
+                .loc(reqDto.loc())
                 .build());
 
         return musicUrl;
