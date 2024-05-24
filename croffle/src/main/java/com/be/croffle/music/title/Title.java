@@ -18,28 +18,16 @@ public class Title {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private int speed;
-
-    @Column
-    private String mood;
-
-    @Column
-    private String loc;
+    @Column(nullable = false)
+    private String prompt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "music_id", nullable = false)
     private Music music;
 
     @Builder
-    public Title(int speed, String mood, String loc) {
-        this.speed = speed;
-        this.mood = mood;
-        this.loc = loc;
-    }
-
-    public String createTitle(){
-        return mood + " " + loc + "의 음악";
+    public Title(String prompt) {
+        this.prompt = prompt;
     }
 
 }

@@ -37,8 +37,13 @@ public class MusicGenService {
                 .musicUrl(url)
                 .build());
 
-        return new MusicGenResponse(url);
 
+        titleJpaRepository.save(Title
+                .builder()
+                .prompt(request.prompt())
+                .build());
+
+        return new MusicGenResponse(url);
     }
 
 
@@ -170,12 +175,9 @@ public class MusicGenService {
         List<Music> musicList = page.getContent();
         List<Title> titleList = title.getContent();
 
-        List<String> musicTitle = titleList.stream()
-                .map(Title::createTitle)
-                .toList();
 
         List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
-                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), musicTitle.get(index)))
+                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), titleList.get(index).getPrompt()))
                 .collect(Collectors.toList());
 
         return new PlaylistResponse(responses);
