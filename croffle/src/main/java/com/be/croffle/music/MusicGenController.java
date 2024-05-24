@@ -1,6 +1,8 @@
 package com.be.croffle.music;
 
 import com.be.croffle.common.ApiResponseGenerator;
+import com.be.croffle.music.dto.MusicGenRequest;
+import com.be.croffle.music.dto.MusicGenResponse;
 import com.be.croffle.music.dto.PlaylistResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,13 @@ public class MusicGenController {
         }
     }
      */
+
+    @PostMapping("/api/generate-music")
+    public ResponseEntity<?> genMusic(@RequestBody MusicGenRequest reqDto){
+        MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+
+    }
 
     @GetMapping("/api/playlist")
     public ResponseEntity<?> getPlaylist() {
