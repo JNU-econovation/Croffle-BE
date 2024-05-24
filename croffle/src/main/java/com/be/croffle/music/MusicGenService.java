@@ -1,8 +1,8 @@
 package com.be.croffle.music;
 
 
-import com.be.croffle.music.dto.EachMusicResponse;
-import com.be.croffle.music.dto.PlaylistResponse;
+import com.be.croffle.feign.MusicGenFeignClient;
+import com.be.croffle.music.dto.*;
 import com.be.croffle.music.title.Title;
 import com.be.croffle.music.title.TitleJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,22 @@ import java.util.stream.IntStream;
 public class MusicGenService {
     private final MusicJpaRepository musicJpaRepository;
     private final TitleJpaRepository titleJpaRepository;
+    private final MusicGenFeignClient musicGenFeignClient;
+
+    public MusicGenResponse getMusicUrl(MusicGenRequest request) {
+        GeneratedUrl response =  musicGenFeignClient.generateMusic(request);
+
+        String url = response.object_url();
+
+        musicJpaRepository.save(Music
+                .builder()
+                .musicUrl(url)
+                .build());
+
+        return new MusicGenResponse(url);
+
+    }
+
   //  private final S3uploader s3uploader;
    // private final String workingDir = System.getProperty("user.dir");
 
