@@ -1,3 +1,4 @@
+"""
 import sys
 import json
 from transformers import AutoProcessor, MusicgenForConditionalGeneration
@@ -52,3 +53,4 @@ if __name__ == "__main__":
     mood = data["mood"]
     loc = data["loc"]
     generate_music(speed, mood, loc)
+"""

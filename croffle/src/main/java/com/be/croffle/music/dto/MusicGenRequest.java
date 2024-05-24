@@ -1,3 +1,4 @@
+/*
 package com.be.croffle.music.dto;
 
 public record MusicGenRequest(
@@ -9,3 +10,4 @@ public record MusicGenRequest(
 ) {
 
 }
+*/

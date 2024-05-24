@@ -1,22 +1,18 @@
 package com.be.croffle.music;
 
 
-import com.be.croffle.music.dto.MusicGenRequest;
 import com.be.croffle.music.dto.EachMusicResponse;
 import com.be.croffle.music.dto.PlaylistResponse;
 import com.be.croffle.music.title.Title;
 import com.be.croffle.music.title.TitleJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -28,13 +24,12 @@ import java.util.stream.IntStream;
 public class MusicGenService {
     private final MusicJpaRepository musicJpaRepository;
     private final TitleJpaRepository titleJpaRepository;
-    private final S3uploader s3uploader;
-    private final String workingDir = System.getProperty("user.dir");
+  //  private final S3uploader s3uploader;
+   // private final String workingDir = System.getProperty("user.dir");
 
-    //TODO : 환경변수화
-
+    /*
     //  @Value("${python.script.path}")
-    private String scriptPath= workingDir + "/src/main/resources/script.py";
+    private String scriptPath= workingDir + "/scripts/infer_top_match.py";
 
     //  @Value("${python.executable.path}")
     private String pythonExecutablePath= workingDir + "/myvenv/bin/python3";
@@ -42,7 +37,14 @@ public class MusicGenService {
     public String generateMusic(MusicGenRequest reqDto){
 
         JSONObject jsonObject = createJsonFromRequest(reqDto);
-        String uuid = executePythonScript(jsonObject.toString());
+
+        String loc = jsonObject.getString("loc");
+        String mood = jsonObject.getString("mood");
+        int speed = jsonObject.getInt("speed");
+
+        String str = loc+mood+speed;
+        String uuid = executePythonScript(str);
+
 
         String musicUrl = s3uploader.uploadFileToS3(uuid);
         musicJpaRepository.save(Music
@@ -68,14 +70,30 @@ public class MusicGenService {
         return jsonObject;
     }
 
-    private String executePythonScript(String jsonInput) {
-        ProcessBuilder processBuilder = new ProcessBuilder(pythonExecutablePath, scriptPath);
+    private String executePythonScript(String prompt) {
+
+        // 명령어 생성
+        String[] command = {
+                pythonExecutablePath,
+                scriptPath, prompt,
+                "--num_samples", "4",
+                "--num_top_matches", "1",
+                "--semantic_path", "./results/semantic/semantic.transformer.4000.pt",
+                "--coarse_path", "./results/coarse/coarse.transformer.7000.pt",
+                "--fine_path", "./results/fine/fine.transformer.3000.pt",
+                "--rvq_path", "./results/clap_rvq/clap.rvq.990.pt",
+                "--kmeans_path", "./results/hubert_kmeans/kmeans.joblib",
+                "--model_config", "./configs/model/musiclm_small.json",
+                "--duration", "4"
+        };
+
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
 
         try {
             Process process = processBuilder.start();
             try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8))) {
-                writer.write(jsonInput);
+                writer.write(prompt);
                 writer.flush();
             }
 
@@ -103,6 +121,8 @@ public class MusicGenService {
         int exitCode = process.waitFor();
         log.info("Python script exited with code {}", exitCode);
     }
+
+     */
 
     @Transactional(readOnly = true)
     public PlaylistResponse getPlaylist() {
