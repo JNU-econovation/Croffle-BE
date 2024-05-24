@@ -26,10 +26,11 @@ public class MusicGenService {
     private final TitleJpaRepository titleJpaRepository;
     private final MusicGenFeignClient musicGenFeignClient;
 
+
     public MusicGenResponse getMusicUrl(MusicGenRequest request) {
         GeneratedUrl response =  musicGenFeignClient.generateMusic(request);
 
-        String url = response.object_url();
+        String url = response.getResponse().getMusicURL();
 
         musicJpaRepository.save(Music
                 .builder()
@@ -39,6 +40,25 @@ public class MusicGenService {
         return new MusicGenResponse(url);
 
     }
+
+
+
+    /*
+    public MusicGenResponse test(TestDto request) {
+        TestRespDto response =  musicGenFeignClient.test(request);
+
+        Long documentId = response.getData().getId();
+
+        musicJpaRepository.save(Music
+                .builder()
+                .musicUrl(documentId.toString())
+                .build());
+
+        return new MusicGenResponse(documentId.toString());
+
+    }
+
+     */
 
   //  private final S3uploader s3uploader;
    // private final String workingDir = System.getProperty("user.dir");

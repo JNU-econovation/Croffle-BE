@@ -1,7 +1,15 @@
 package com.be.croffle.music.dto;
 
-public record GeneratedUrl(
-        String message,
-        String object_url
-        ) {
+import lombok.Getter;
+
+@Getter
+public class GeneratedUrl {
+    String success;
+    RespDto response;
+    String error;
+
+    @Getter
+    public static class RespDto{
+        String musicURL;
+    }
 }

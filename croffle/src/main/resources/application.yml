@@ -6,11 +6,11 @@ spring:
     password: 12345678
   jpa:
     defer-datasource-initialization: true
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQLDialect
 
     hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.MySQLDialect
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true

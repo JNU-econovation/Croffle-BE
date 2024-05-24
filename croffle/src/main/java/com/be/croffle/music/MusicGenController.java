@@ -29,12 +29,25 @@ public class MusicGenController {
     }
      */
 
+
     @PostMapping("/api/generate-music")
     public ResponseEntity<?> genMusic(@RequestBody MusicGenRequest reqDto){
         MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
 
     }
+
+
+
+    /*
+    @PostMapping("/api/generate-music")
+    public ResponseEntity<?> test(@RequestBody TestDto reqDto){
+        MusicGenResponse response = musicGenService.test(reqDto);
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+
+    }
+
+     */
 
     @GetMapping("/api/playlist")
     public ResponseEntity<?> getPlaylist() {
