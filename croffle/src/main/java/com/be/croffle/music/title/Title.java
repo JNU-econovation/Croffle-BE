@@ -26,8 +26,9 @@ public class Title {
     private Music music;
 
     @Builder
-    public Title(String prompt) {
+    public Title(String prompt, Music music) {
         this.prompt = prompt;
+        this.music = music;
     }
 
 }

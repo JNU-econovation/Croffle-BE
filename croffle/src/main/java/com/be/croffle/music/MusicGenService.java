@@ -32,7 +32,7 @@ public class MusicGenService {
 
         String url = response.getResponse().getMusicURL();
 
-        musicJpaRepository.save(Music
+        Music music = musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(url)
                 .build());
@@ -41,6 +41,7 @@ public class MusicGenService {
         titleJpaRepository.save(Title
                 .builder()
                 .prompt(request.prompt())
+                .music(music)
                 .build());
 
         return new MusicGenResponse(url);
