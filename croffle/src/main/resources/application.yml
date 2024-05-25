@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/croffle
-    username: root
-    password: 12345678
+    url: jdbc:mysql://localhost:3306/{DATASOURCE_URL}
+    username: {USERNAME}
+    password: {PASSWORD}
   jpa:
     defer-datasource-initialization: true
     generate-ddl: true

@@ -1,6 +1,0 @@
-POST http://localhost:8080/api/generate-music
-Content-Type: application/json
-
-{
-  "prompt": "A happy song about a cat"
-}
