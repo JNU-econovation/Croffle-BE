@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MusicGenService {
+public class MusicGenServiceImpl {
     private final MusicJpaRepository musicJpaRepository;
     private final TitleJpaRepository titleJpaRepository;
     private final MusicGenFeignClient musicGenFeignClient;

@@ -1,6 +1,7 @@
 package com.be.croffle.music.title;
 
 
+import com.be.croffle.common.BaseEntity;
 import com.be.croffle.music.Music;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "title_tb")
-public class Title {
+public class Title extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

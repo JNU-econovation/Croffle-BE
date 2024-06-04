@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MusicGenController {
 
-    private final MusicGenService musicGenService;
+    private final MusicGenServiceImpl musicGenService;
 
     /*
     @PostMapping("/api/generate-music")
