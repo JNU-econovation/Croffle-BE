@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MusicGenController {
 
-    private final MusicGenServiceImpl musicGenService;
+    private final MusicGenService musicGenService;
 
     @PostMapping("/api/generate-music")
     public ResponseEntity<ApiResponse.CustomBody<MusicGenResponse>> genMusic(@RequestBody MusicGenRequest reqDto){

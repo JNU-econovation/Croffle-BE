@@ -21,30 +21,28 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MusicGenServiceImpl {
+public class MusicGenService {
     private final MusicJpaRepository musicJpaRepository;
     private final TitleJpaRepository titleJpaRepository;
     private final MusicGenFeignClient musicGenFeignClient;
 
 
     public MusicGenResponse getMusicUrl(MusicGenRequest request) {
-        GeneratedUrl response =  musicGenFeignClient.generateMusic(request);
-
-        String url = response.getResponse().getMusicURL();
+        ServerResponse response =  musicGenFeignClient.generateMusic(request);
+        String s3Url = response.response().musicURL();
 
         Music music = musicJpaRepository.save(Music
                 .builder()
-                .musicUrl(url)
+                .musicUrl(s3Url)
                 .build());
-
 
         titleJpaRepository.save(Title
                 .builder()
-                .prompt(request.prompt())
+                .prompt(request.prompt2())
                 .music(music)
                 .build());
 
-        return new MusicGenResponse(url);
+        return new MusicGenResponse(s3Url);
     }
 
 
@@ -58,15 +56,12 @@ public class MusicGenServiceImpl {
         List<Music> musicList = page.getContent();
         List<Title> titleList = title.getContent();
 
-
         List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
                 .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), titleList.get(index).getPrompt()))
                 .collect(Collectors.toList());
 
         return new PlaylistResponse(responses);
     }
-
-
 
 
     /*
