@@ -15,7 +15,20 @@ public class MusicGenController {
 
     private final MusicGenServiceImpl musicGenService;
 
-    /*
+    @PostMapping("/api/generate-music")
+    public ResponseEntity<?> genMusic(@RequestBody MusicGenRequest reqDto){
+        MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/api/playlist")
+    public ResponseEntity<?> getPlaylist() {
+        PlaylistResponse response = musicGenService.getPlaylist();
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+    }
+
+        /*
     @PostMapping("/api/generate-music")
     public ResponseEntity<?> generateMusic(@RequestBody MusicGenRequest reqDto) {
         try {
@@ -28,31 +41,5 @@ public class MusicGenController {
         }
     }
      */
-
-
-    @PostMapping("/api/generate-music")
-    public ResponseEntity<?> genMusic(@RequestBody MusicGenRequest reqDto){
-        MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
-        return ApiResponseGenerator.success(response, HttpStatus.OK);
-
-    }
-
-
-    //테스트
-    /*
-    @PostMapping("/api/generate-music")
-    public ResponseEntity<?> test(@RequestBody TestDto reqDto){
-        MusicGenResponse response = musicGenService.test(reqDto);
-        return ApiResponseGenerator.success(response, HttpStatus.OK);
-
-    }
-
-     */
-
-    @GetMapping("/api/playlist")
-    public ResponseEntity<?> getPlaylist() {
-        PlaylistResponse response = musicGenService.getPlaylist();
-        return ApiResponseGenerator.success(response, HttpStatus.OK);
-    }
 
 }
