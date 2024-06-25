@@ -1,5 +1,6 @@
 package com.be.croffle.music;
 
+import com.be.croffle.common.ApiResponse;
 import com.be.croffle.common.ApiResponseGenerator;
 import com.be.croffle.music.dto.MusicGenRequest;
 import com.be.croffle.music.dto.MusicGenResponse;
@@ -16,14 +17,14 @@ public class MusicGenController {
     private final MusicGenServiceImpl musicGenService;
 
     @PostMapping("/api/generate-music")
-    public ResponseEntity<?> genMusic(@RequestBody MusicGenRequest reqDto){
+    public ResponseEntity<ApiResponse.CustomBody<MusicGenResponse>> genMusic(@RequestBody MusicGenRequest reqDto){
         MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
 
     }
 
     @GetMapping("/api/playlist")
-    public ResponseEntity<?> getPlaylist() {
+    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPlaylist() {
         PlaylistResponse response = musicGenService.getPlaylist();
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
