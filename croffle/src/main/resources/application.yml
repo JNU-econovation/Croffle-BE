@@ -28,3 +28,7 @@ oauth2:
     scope:
       - profile
       - email
+
+jwt:
+  secret: ${JWT_SECRET}
+
