@@ -48,6 +48,26 @@ public class MusicGenServiceImpl {
     }
 
 
+    @Transactional(readOnly = true)
+    public PlaylistResponse getPlaylist() {
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+        Page<Music> page = musicJpaRepository.findAll(pageable);
+        Page<Title> title = titleJpaRepository.findAll(pageable);
+
+        List<Music> musicList = page.getContent();
+        List<Title> titleList = title.getContent();
+
+
+        List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
+                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), titleList.get(index).getPrompt()))
+                .collect(Collectors.toList());
+
+        return new PlaylistResponse(responses);
+    }
+
+
+
 
     /*
     public MusicGenResponse test(TestDto request) {
@@ -66,8 +86,8 @@ public class MusicGenServiceImpl {
 
      */
 
-  //  private final S3uploader s3uploader;
-   // private final String workingDir = System.getProperty("user.dir");
+    //  private final S3uploader s3uploader;
+    // private final String workingDir = System.getProperty("user.dir");
 
     /*
     //  @Value("${python.script.path}")
@@ -166,22 +186,5 @@ public class MusicGenServiceImpl {
 
      */
 
-    @Transactional(readOnly = true)
-    public PlaylistResponse getPlaylist() {
-
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
-        Page<Music> page = musicJpaRepository.findAll(pageable);
-        Page<Title> title = titleJpaRepository.findAll(pageable);
-
-        List<Music> musicList = page.getContent();
-        List<Title> titleList = title.getContent();
-
-
-        List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
-                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), titleList.get(index).getPrompt()))
-                .collect(Collectors.toList());
-
-        return new PlaylistResponse(responses);
-    }
 
 }
