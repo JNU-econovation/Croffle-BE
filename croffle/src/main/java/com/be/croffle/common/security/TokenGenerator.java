@@ -1,4 +1,4 @@
-package com.be.croffle.common;
+package com.be.croffle.common.security;
 
 import com.be.croffle.member.Member;
 import io.jsonwebtoken.Claims;

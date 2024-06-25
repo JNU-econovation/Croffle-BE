@@ -1,6 +1,6 @@
 package com.be.croffle.member;
 
-import com.be.croffle.common.TokenGenerator;
+import com.be.croffle.common.security.TokenGenerator;
 import com.be.croffle.member.oauth.dto.OAuthUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

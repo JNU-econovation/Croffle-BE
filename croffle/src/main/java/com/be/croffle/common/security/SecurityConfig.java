@@ -26,10 +26,10 @@ public class SecurityConfig {
         //csrf disable
         http.csrf(AbstractHttpConfigurer::disable);
 
-        //cors 재설정
-        //    http.cors(corsCustomizer -> corsCustomizer.configurationSource(configurationSource()));
+        //cors settings
+        http.cors(corsCustomizer -> corsCustomizer.configurationSource(configurationSource()));
 
-        // 세션 사용 안함 -> 토큰 방식 사용
+        // token method
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
@@ -51,33 +51,32 @@ public class SecurityConfig {
                 handling.authenticationEntryPoint(((request, response, authException) -> {
                     resolver.resolveException(request, response, null, new UnAuthorizedException(ErrorMessage.UNAUTHORIZED_ERROR));
                 })));
+         */
 
+        /*
         // 권한 실패 처리
         http.exceptionHandling(handling ->
                 handling.accessDeniedHandler(((request, response, accessDeniedException) -> {
                     resolver.resolveException(request, response, null, new ForbiddenException(ErrorMessage.FORBIDDEN_ERROR));
                 })));
-
          */
 
-        /*
+        //authorization setting
         http.authorizeHttpRequests(authorize ->
                 authorize
                         .requestMatchers(new AntPathRequestMatcher("/api/playlist", "GET")).authenticated()
                         .anyRequest().permitAll()
         );
 
-
-         */
         return http.build();
 
     }
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE (Javascript 요청 허용)
+        configuration.addAllowedMethod("*");
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
-        configuration.setAllowCredentials(true); // 클라이언트에서 쿠키 요청 허용
+        configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -1,7 +1,7 @@
 package com.be.croffle.music;
 
 
-import com.be.croffle.feign.MusicGenFeignClient;
+import com.be.croffle.feign.MusicGenWithTextFeignClient;
 import com.be.croffle.music.dto.*;
 import com.be.croffle.music.title.Title;
 import com.be.croffle.music.title.TitleJpaRepository;
@@ -24,11 +24,11 @@ import java.util.stream.IntStream;
 public class MusicGenService {
     private final MusicJpaRepository musicJpaRepository;
     private final TitleJpaRepository titleJpaRepository;
-    private final MusicGenFeignClient musicGenFeignClient;
+    private final MusicGenWithTextFeignClient musicGenWithTextFeignClient;
 
 
-    public MusicGenResponse getMusicUrl(MusicGenRequest request) {
-        ServerResponse response =  musicGenFeignClient.generateMusic(request);
+    public MusicGenResponse getMusicUrl(MusicGenWithTextRequest request) {
+        ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
         String s3Url = response.response().musicURL();
 
         Music music = musicJpaRepository.save(Music
