@@ -19,6 +19,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -39,3 +40,5 @@ out/
 .vscode/
 
 .env
+
+*.http
