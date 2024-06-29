@@ -1,4 +1,4 @@
-package com.be.croffle.common;
+package com.be.croffle.common.utils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

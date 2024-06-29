@@ -1,7 +1,7 @@
 package com.be.croffle.member;
 
-import com.be.croffle.common.ApiResponse;
-import com.be.croffle.common.ApiResponseGenerator;
+import com.be.croffle.common.utils.ApiResponse;
+import com.be.croffle.common.utils.ApiResponseGenerator;
 import com.be.croffle.member.oauth.OAuthTokenService;
 import com.be.croffle.member.oauth.dto.AccessTokenResponse;
 import lombok.RequiredArgsConstructor;

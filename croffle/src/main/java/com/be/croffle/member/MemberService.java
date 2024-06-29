@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final TokenGenerator tokenGenerator;
 
     public String findMemberByGoogleId(OAuthUserInfoResponse userInfoResponse) {
-        Member member = memberRepository.findByGoogleId(userInfoResponse.getId()).orElseGet(
+        Member member = memberJpaRepository.findByGoogleId(userInfoResponse.getId()).orElseGet(
                 ()->
-                memberRepository.save(Member.builder()
+                memberJpaRepository.save(Member.builder()
                         .googleId(userInfoResponse.getId())
                         .name(userInfoResponse.getName())
                         .build()));

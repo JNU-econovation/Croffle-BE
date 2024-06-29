@@ -1,5 +1,6 @@
-package com.be.croffle.common;
+package com.be.croffle.common.utils;
 
+import com.be.croffle.common.error.Error;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

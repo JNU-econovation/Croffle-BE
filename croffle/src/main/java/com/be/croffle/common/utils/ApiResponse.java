@@ -1,5 +1,6 @@
-package com.be.croffle.common;
+package com.be.croffle.common.utils;
 
+import com.be.croffle.common.error.Error;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
