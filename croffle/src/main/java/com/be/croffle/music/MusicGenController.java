@@ -1,16 +1,17 @@
 package com.be.croffle.music;
 
-import com.be.croffle.common.ApiResponse;
-import com.be.croffle.common.ApiResponseGenerator;
+import com.be.croffle.common.utils.ApiResponse;
+import com.be.croffle.common.utils.ApiResponseGenerator;
+import com.be.croffle.common.security.UserDetailsImpl;
 import com.be.croffle.music.dto.MusicGenWithTextRequest;
 import com.be.croffle.music.dto.MusicGenResponse;
 import com.be.croffle.music.dto.PlaylistResponse;
-import com.be.croffle.music.dto.ServerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +23,8 @@ public class MusicGenController {
     private final MusicGenService musicGenService;
 
     @PostMapping("/api/generate-music")
-    public ResponseEntity<ApiResponse.CustomBody<MusicGenResponse>> genMusic(@RequestBody MusicGenWithTextRequest reqDto){
-        MusicGenResponse response = musicGenService.getMusicUrl(reqDto);
+    public ResponseEntity<ApiResponse.CustomBody<MusicGenResponse>> genMusic(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MusicGenWithTextRequest reqDto){
+        MusicGenResponse response = musicGenService.genMusicUrl(reqDto, userDetails);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
 
     }
@@ -35,11 +36,24 @@ public class MusicGenController {
         return ApiResponseGenerator.success(HttpStatus.OK);
     }
 
+    @GetMapping("/api/myplaylist")
+    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getMyPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PlaylistResponse response = musicGenService.getMyPlaylist(userDetails);
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+    }
+
     @GetMapping("/api/playlist")
-    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPlaylist() {
+    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         PlaylistResponse response = musicGenService.getPlaylist();
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
+
+    @PostMapping("/api/music/{musicId}/like")
+    public ResponseEntity<?> likeMusic(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("musicId") Long musicId) {
+        musicGenService.likeMusic(userDetails, musicId);
+        return ApiResponseGenerator.success(HttpStatus.OK);
+    }
+
 
         /*
     @PostMapping("/api/generate-music")
