@@ -1,7 +1,7 @@
 package com.be.croffle.member;
 
 
-import com.be.croffle.common.BaseEntity;
+import com.be.croffle.common.utils.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
