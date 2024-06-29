@@ -26,7 +26,8 @@ public class TokenGenerator {
 
     //Create access token
     public String createAccessToken(Member member) {
-        String token = Jwts.builder().setSubject(member.getGoogleId()) // 정보 저장
+        String token = Jwts.builder()
+                .setSubject(member.getGoogleId() + "," + member.getName())
                 .setHeaderParam("typ", "JWT")
                 .setIssuedAt(new Date()) // 토큰 발행 시간
                 .setExpiration(calcExpirationDateTime()) // 토큰 만료 시간
