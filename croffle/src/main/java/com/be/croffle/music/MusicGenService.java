@@ -1,66 +1,129 @@
 package com.be.croffle.music;
 
 
+import com.be.croffle.common.security.UserDetailsImpl;
 import com.be.croffle.feign.MusicGenWithTextFeignClient;
+import com.be.croffle.member.Member;
+import com.be.croffle.member.MemberJpaRepository;
 import com.be.croffle.music.dto.*;
-import com.be.croffle.music.title.Title;
-import com.be.croffle.music.title.TitleJpaRepository;
+import com.be.croffle.music.like.Like;
+import com.be.croffle.music.like.LikeJpaRepository;
+import com.be.croffle.music.mymusic.MyMusicJpaRepository;
+import com.be.croffle.music.mymusic.Mymusic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MusicGenService {
-    private final MusicJpaRepository musicJpaRepository;
-    private final TitleJpaRepository titleJpaRepository;
+    private final MyMusicJpaRepository myMusicJpaRepository;
     private final MusicGenWithTextFeignClient musicGenWithTextFeignClient;
+    private final MusicJpaRepository musicJpaRepository;
+    private final LikeJpaRepository likeJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
+    @Value("${s3.url}")
+    private String s3Url;
 
-    public MusicGenResponse getMusicUrl(MusicGenWithTextRequest request) {
-        ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
-        String s3Url = response.response().musicURL();
+    public MusicGenResponse genMusicUrl(MusicGenWithTextRequest request, UserDetailsImpl userDetails) {
+   //     ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
+    //    String s3Url = response.response().musicURL();
 
-        Music music = musicJpaRepository.save(Music
+        String role = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(role.equals("anonymousUser")){
+            musicJpaRepository.save(Music
+                    .builder()
+                    .musicUrl(s3Url)
+                    .title(request.prompt1())
+                    .build());
+            return new MusicGenResponse(s3Url);
+
+        }
+
+        // MyMusic에 저장, Music에도 저장
+        musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(s3Url)
+                .title(request.prompt1())
                 .build());
 
-        titleJpaRepository.save(Title
-                .builder()
-                .prompt(request.prompt2())
-                .music(music)
-                .build());
+
+        memberJpaRepository.findByGoogleId(userDetails.getGoogleId())
+                .ifPresent(mem -> {
+                    myMusicJpaRepository.save(Mymusic
+                            .builder()
+                            .musicUrl(s3Url)
+                            .title(request.prompt1())
+                            .member(mem)
+                            .build());
+                });
 
         return new MusicGenResponse(s3Url);
     }
 
 
     @Transactional(readOnly = true)
+    public PlaylistResponse getMyPlaylist(UserDetailsImpl userDetails) {
+        System.out.println("asdfasdf");
+
+        memberJpaRepository.findByGoogleId(userDetails.getGoogleId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+        Page<Mymusic> page = myMusicJpaRepository.findAll(pageable);
+
+        List<Mymusic> mymusicList = page.getContent();
+
+        List<EachMusicResponse> responses = mymusicList.stream()
+                .map(music -> new EachMusicResponse(music.getId(), music.getMusicUrl(), music.getTitle()))
+                .toList();
+
+        return new PlaylistResponse(responses);
+    }
+
+    @Transactional(readOnly = true)
     public PlaylistResponse getPlaylist() {
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
         Page<Music> page = musicJpaRepository.findAll(pageable);
-        Page<Title> title = titleJpaRepository.findAll(pageable);
 
         List<Music> musicList = page.getContent();
-        List<Title> titleList = title.getContent();
 
-        List<EachMusicResponse> responses = IntStream.range(0, musicList.size())
-                .mapToObj(index -> new EachMusicResponse(musicList.get(index).getId(), musicList.get(index).getMusicUrl(), titleList.get(index).getPrompt()))
-                .collect(Collectors.toList());
+        List<EachMusicResponse> responses = musicList.stream()
+                .map(music -> new EachMusicResponse(music.getId(), music.getMusicUrl(), music.getTitle()))
+                .toList();
 
         return new PlaylistResponse(responses);
+    }
+
+    public void likeMusic(UserDetailsImpl userDetails, Long musicId) {
+        Member member = memberJpaRepository.findByGoogleId(userDetails.getGoogleId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Music music = musicJpaRepository.findById(musicId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid music ID"));
+
+        if (likeJpaRepository.existsByMemberAndMusic(member, music)) {
+            throw new IllegalStateException("이미 좋아요를 누른 노래입니다.");
+        }
+
+        likeJpaRepository.save(Like
+                .builder()
+                .member(member)
+                .music(music)
+                .build());
+
     }
 
 
