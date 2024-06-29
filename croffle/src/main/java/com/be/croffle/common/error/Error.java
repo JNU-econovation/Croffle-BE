@@ -1,4 +1,4 @@
-package com.be.croffle.common.utils;
+package com.be.croffle.common.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
