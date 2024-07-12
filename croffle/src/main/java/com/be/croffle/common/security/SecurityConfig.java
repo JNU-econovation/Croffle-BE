@@ -20,6 +20,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -43,7 +45,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         //cors settings
-        http.cors(corsCustomizer -> corsCustomizer.configurationSource(configurationSource()));
+   //     http.cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()));
+      //  http.cors(AbstractHttpConfigurer::disable);
 
         // token method
         http.sessionManagement(session -> session
@@ -88,6 +91,7 @@ public class SecurityConfig {
         );
 
          */
+
         /*
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/generate-music").permitAll()
@@ -102,15 +106,23 @@ public class SecurityConfig {
         return http.build();
 
     }
-    public CorsConfigurationSource configurationSource() {
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
+
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "https://580d-168-131-194-179.ngrok-free.app", "http://localhost:3000", "http://localhost:3000/"));
+        configuration.setAllowedMethods(
+                Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(
+                Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setMaxAge(3600L);
         configuration.setAllowCredentials(true);
-        configuration.addExposedHeader("Authorization");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

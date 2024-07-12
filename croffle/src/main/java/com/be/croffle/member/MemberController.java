@@ -14,12 +14,14 @@ public class MemberController {
 
     private final OAuthTokenService oAuthTokenService;
 
+
     //redirect uri
     @GetMapping("/login/oauth2/code/google")
     public ApiResponse<ApiResponse.CustomBody<AccessTokenResponse>> oAuthLogin(@RequestParam(value = "code") String code){
         AccessTokenResponse response = oAuthTokenService.getGoogleAccessToken(code);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
+
 
 
 }
