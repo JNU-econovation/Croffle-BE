@@ -17,12 +17,12 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "music_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "music_id", nullable = false)
     private Music music;
 
     @Builder
