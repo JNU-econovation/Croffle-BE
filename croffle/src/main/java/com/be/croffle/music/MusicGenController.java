@@ -4,8 +4,9 @@ import com.be.croffle.common.utils.ApiResponse;
 import com.be.croffle.common.utils.ApiResponseGenerator;
 import com.be.croffle.common.security.UserDetailsImpl;
 import com.be.croffle.music.dto.MusicGenWithTextRequest;
-import com.be.croffle.music.dto.MusicGenResponse;
-import com.be.croffle.music.dto.PlaylistResponse;
+import com.be.croffle.music.dto.gen.MusicGenResponseWithText;
+import com.be.croffle.music.dto.playlist.MyPlaylistResponse;
+import com.be.croffle.music.dto.playlist.PlaylistResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,32 +23,46 @@ public class MusicGenController {
 
     private final MusicGenService musicGenService;
 
+    //텍스트로 음악 생성하기
     @PostMapping("/api/generate-music")
-    public ResponseEntity<ApiResponse.CustomBody<MusicGenResponse>> genMusic(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MusicGenWithTextRequest reqDto){
-        MusicGenResponse response = musicGenService.genMusicUrl(reqDto, userDetails);
+    public ResponseEntity<ApiResponse.CustomBody<MusicGenResponseWithText>> genMusic(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MusicGenWithTextRequest reqDto){
+        MusicGenResponseWithText response = musicGenService.genMusicUrl(reqDto, userDetails);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
 
     }
+
 
     //이미지로 음악 생성하기
     @PostMapping(value = "/api/generate-music/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> genMusicWithImage(@RequestPart("image") MultipartFile image){
-        log.info("image: {}", image);
+    public ResponseEntity<?> genMusicWithImage(@RequestPart("image") MultipartFile image, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        musicGenService.genMusicUrlWithImage(image, userDetails);
         return ApiResponseGenerator.success(HttpStatus.OK);
     }
 
+
+
+    //나의 플레이리스트 조회
     @GetMapping("/api/myplaylist")
-    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getMyPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PlaylistResponse response = musicGenService.getMyPlaylist(userDetails);
+    public ResponseEntity<ApiResponse.CustomBody<MyPlaylistResponse>> getMyPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        MyPlaylistResponse response = musicGenService.getMyPlaylist(userDetails);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
 
+    //플레이리스트 조회
     @GetMapping("/api/playlist")
     public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         PlaylistResponse response = musicGenService.getPlaylist();
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
 
+    //플레이리스트 조회
+    @GetMapping("/api/popular-playlist")
+    public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPopularPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PlaylistResponse response = musicGenService.getPopularPlaylist();
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
+    }
+
+    //좋아요 누르기
     @PostMapping("/api/music/{musicId}/like")
     public ResponseEntity<?> likeMusic(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("musicId") Long musicId) {
         musicGenService.likeMusic(userDetails, musicId);
