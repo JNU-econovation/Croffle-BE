@@ -1,6 +1,6 @@
-package com.be.croffle.music.dto;
+package com.be.croffle.music.dto.gen;
 
-public record MusicGenResponse(
+public record MusicGenResponseWithText(
         String musicUrl
 ) {
 }

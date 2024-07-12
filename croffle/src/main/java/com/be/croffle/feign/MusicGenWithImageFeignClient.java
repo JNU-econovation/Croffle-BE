@@ -1,6 +1,6 @@
 package com.be.croffle.feign;
 
-import com.be.croffle.music.dto.ServerResponse;
+import com.be.croffle.music.dto.gen.ServerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
