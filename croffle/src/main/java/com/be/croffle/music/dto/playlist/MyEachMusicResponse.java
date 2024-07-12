@@ -1,4 +1,4 @@
-package com.be.croffle.music.dto;
+package com.be.croffle.music.dto.playlist;
 
 public record MyEachMusicResponse(
         Long musicId,

@@ -1,4 +1,4 @@
-package com.be.croffle.music.dto;
+package com.be.croffle.music.dto.playlist;
 
 import java.util.List;
 
