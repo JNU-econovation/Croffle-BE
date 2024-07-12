@@ -1,6 +1,6 @@
 package com.be.croffle.music.dto;
 
-public record EachMusicResponse(
+public record MyEachMusicResponse(
         Long musicId,
         String musicUrl,
         String title
