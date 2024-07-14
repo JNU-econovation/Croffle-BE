@@ -51,14 +51,14 @@ public class MusicGenController {
     //플레이리스트 조회
     @GetMapping("/api/playlist")
     public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PlaylistResponse response = musicGenService.getPlaylist();
+        PlaylistResponse response = musicGenService.getPlaylist(userDetails);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
 
     //플레이리스트 조회
     @GetMapping("/api/popular-playlist")
     public ResponseEntity<ApiResponse.CustomBody<PlaylistResponse>> getPopularPlaylist(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        PlaylistResponse response = musicGenService.getPopularPlaylist();
+        PlaylistResponse response = musicGenService.getPopularPlaylist(userDetails);
         return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
 
