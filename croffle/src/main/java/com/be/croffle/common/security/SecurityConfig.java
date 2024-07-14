@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -82,15 +83,20 @@ public class SecurityConfig {
 
 
         //authorization setting
+
         /*
         http.authorizeHttpRequests(authorize ->
                 authorize
-                        .requestMatchers(new AntPathRequestMatcher("/api/myplaylist", "GET")).authenticated()
-                        .requestMatchers(new AntPathRequestMatcher("/api/playlist", "GET")).authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/playlist", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/popular-playlist", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/generate-music", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/generate-music/image", "POST")).permitAll()
+                        .anyRequest().authenticated()
         );
 
          */
+
+
 
         /*
         http.authorizeHttpRequests(authorize -> authorize
