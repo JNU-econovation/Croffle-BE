@@ -4,6 +4,7 @@ import com.be.croffle.common.utils.ApiResponse;
 import com.be.croffle.common.utils.ApiResponseGenerator;
 import com.be.croffle.common.security.UserDetailsImpl;
 import com.be.croffle.music.dto.MusicGenWithTextRequest;
+import com.be.croffle.music.dto.gen.MusicGenResponseWithImage;
 import com.be.croffle.music.dto.gen.MusicGenResponseWithText;
 import com.be.croffle.music.dto.playlist.MyPlaylistResponse;
 import com.be.croffle.music.dto.playlist.PlaylistResponse;
@@ -33,10 +34,11 @@ public class MusicGenController {
 
 
     //이미지로 음악 생성하기
-    @PostMapping(value = "/api/generate-music/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/api/generate-music/image", consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> genMusicWithImage(@RequestPart("image") MultipartFile image, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        musicGenService.genMusicUrlWithImage(image, userDetails);
-        return ApiResponseGenerator.success(HttpStatus.OK);
+        MusicGenResponseWithImage response = musicGenService.genMusicUrlWithImage(image, userDetails);
+        //
+        return ApiResponseGenerator.success(response, HttpStatus.OK);
     }
 
 

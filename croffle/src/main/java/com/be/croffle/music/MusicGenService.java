@@ -3,12 +3,15 @@ package com.be.croffle.music;
 
 import com.be.croffle.common.security.UserDetailsImpl;
 import com.be.croffle.feign.MusicGenWithImageFeignClient;
+import com.be.croffle.feign.MusicGenWithTextFeignClient;
 import com.be.croffle.member.Member;
 import com.be.croffle.member.MemberJpaRepository;
 import com.be.croffle.member.exception.MemberExceptions;
 import com.be.croffle.music.dto.*;
 import com.be.croffle.music.dto.gen.MusicGenResponseWithImage;
 import com.be.croffle.music.dto.gen.MusicGenResponseWithText;
+import com.be.croffle.music.dto.gen.ServerResponse;
+import com.be.croffle.music.dto.gen.ServerResponseImage;
 import com.be.croffle.music.dto.playlist.EachMusicResponse;
 import com.be.croffle.music.dto.playlist.MyEachMusicResponse;
 import com.be.croffle.music.dto.playlist.MyPlaylistResponse;
@@ -39,19 +42,19 @@ import java.util.List;
 @Transactional
 public class MusicGenService {
     private final MyMusicJpaRepository myMusicJpaRepository;
-   // private final MusicGenWithTextFeignClient musicGenWithTextFeignClient;
+    private final MusicGenWithTextFeignClient musicGenWithTextFeignClient;
     private final MusicJpaRepository musicJpaRepository;
     private final LikeJpaRepository likeJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
     private final MemberExceptions memberExceptions;
- //   private final MusicGenWithImageFeignClient musicGenWithImageFeignClient;
+    private final MusicGenWithImageFeignClient musicGenWithImageFeignClient;
 
     @Value("${s3.url}")
     private String s3Url;
 
     public MusicGenResponseWithText genMusicUrl(MusicGenWithTextRequest request, UserDetailsImpl userDetails) {
-   //     ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
-    //    String s3Url = response.response().musicURL();
+        ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
+        String s3Url = response.response().musicURL();
 
         String role = SecurityContextHolder.getContext().getAuthentication().getName();
         if(role.equals("anonymousUser")){
@@ -87,17 +90,19 @@ public class MusicGenService {
 
 
     public MusicGenResponseWithImage genMusicUrlWithImage(MultipartFile image, UserDetailsImpl userDetails) {
-           //  ServerResponse response =  musicGenWithImageFeignClient.generateMusic(image);
-           //  String s3Url = response.response().musicURL();
+             ServerResponseImage response =  musicGenWithImageFeignClient.generateMusic(image);
+            String s3Url = response.musicUrl();
+             String title = response.title();
+      //  String title = "AI에서 생성된 제목";
 
         String role = SecurityContextHolder.getContext().getAuthentication().getName();
         if(role.equals("anonymousUser")){
             musicJpaRepository.save(Music
                     .builder()
                     .musicUrl(s3Url)
-                    .title("AI에서 받은 사진 제목")
+                    .title(title)
                     .build());
-            return new MusicGenResponseWithImage(s3Url, "AI에서 받은 사진 제목");
+            return new MusicGenResponseWithImage(s3Url, title);
 
         }
 
@@ -105,7 +110,7 @@ public class MusicGenService {
         musicJpaRepository.save(Music
                 .builder()
                 .musicUrl(s3Url)
-                .title("AI에서 받은 사진 제목")
+                .title(title)
                 .build());
 
 
@@ -114,12 +119,12 @@ public class MusicGenService {
                     myMusicJpaRepository.save(Mymusic
                             .builder()
                             .musicUrl(s3Url)
-                            .title("AI에서 받은 사진 제목")
+                            .title(title)
                             .member(mem)
                             .build());
                 });
 
-        return new MusicGenResponseWithImage(s3Url, "AI에서 받은 사진 제목");
+        return new MusicGenResponseWithImage(s3Url, title);
     }
 
 
