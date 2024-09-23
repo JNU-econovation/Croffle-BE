@@ -1,7 +1,7 @@
 package com.be.croffle.music.like;
 
-import com.be.croffle.member.Member;
-import com.be.croffle.music.Music;
+import com.be.croffle.member.domain.Member;
+import com.be.croffle.music.domain.Music;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

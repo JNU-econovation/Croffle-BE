@@ -1,4 +1,4 @@
-package com.be.croffle.member;
+package com.be.croffle.member.domain;
 
 
 import com.be.croffle.common.utils.BaseEntity;

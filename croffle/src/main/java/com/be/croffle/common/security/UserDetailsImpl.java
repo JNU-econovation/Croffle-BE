@@ -1,6 +1,6 @@
 package com.be.croffle.common.security;
 
-import com.be.croffle.member.Member;
+import com.be.croffle.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

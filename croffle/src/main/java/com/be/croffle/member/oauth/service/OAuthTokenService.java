@@ -1,11 +1,11 @@
-package com.be.croffle.member.oauth;
+package com.be.croffle.member.oauth.service;
 
-import com.be.croffle.feign.OAuthFeignClient;
-import com.be.croffle.member.MemberService;
-import com.be.croffle.member.oauth.dto.AccessTokenResponse;
-import com.be.croffle.member.oauth.dto.GoogleOAuthTokenRequest;
-import com.be.croffle.member.oauth.dto.OAuthTokenRequest;
-import com.be.croffle.member.oauth.dto.OAuthUserInfoResponse;
+import com.be.croffle.feign.oauth.OAuthFeignClient;
+import com.be.croffle.member.service.MemberService;
+import com.be.croffle.member.oauth.dto.response.AccessTokenResponse;
+import com.be.croffle.member.oauth.dto.request.GoogleOAuthTokenRequest;
+import com.be.croffle.member.oauth.dto.request.OAuthTokenRequest;
+import com.be.croffle.member.oauth.dto.response.OAuthUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

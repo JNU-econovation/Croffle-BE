@@ -1,7 +1,7 @@
 package com.be.croffle.music.mymusic;
 
 import com.be.croffle.common.utils.BaseEntity;
-import com.be.croffle.member.Member;
+import com.be.croffle.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,7 +1,9 @@
-package com.be.croffle.member;
+package com.be.croffle.member.service;
 
 import com.be.croffle.common.security.TokenGenerator;
-import com.be.croffle.member.oauth.dto.OAuthUserInfoResponse;
+import com.be.croffle.member.domain.Member;
+import com.be.croffle.member.oauth.dto.response.OAuthUserInfoResponse;
+import com.be.croffle.member.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

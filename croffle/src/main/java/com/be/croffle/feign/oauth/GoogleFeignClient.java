@@ -1,6 +1,7 @@
-package com.be.croffle.feign;
+package com.be.croffle.feign.oauth;
 
-import com.be.croffle.member.oauth.dto.OAuthUserInfoResponse;
+import com.be.croffle.feign.common.FeignClientConfig;
+import com.be.croffle.member.oauth.dto.response.OAuthUserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

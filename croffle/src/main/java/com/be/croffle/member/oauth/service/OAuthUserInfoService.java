@@ -1,9 +1,8 @@
-package com.be.croffle.member.oauth;
+package com.be.croffle.member.oauth.service;
 
-import com.be.croffle.feign.GoogleFeignClient;
-import com.be.croffle.member.oauth.dto.OAuthUserInfoResponse;
+import com.be.croffle.feign.oauth.GoogleFeignClient;
+import com.be.croffle.member.oauth.dto.response.OAuthUserInfoResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service

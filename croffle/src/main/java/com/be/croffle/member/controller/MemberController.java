@@ -1,9 +1,9 @@
-package com.be.croffle.member;
+package com.be.croffle.member.controller;
 
 import com.be.croffle.common.utils.ApiResponse;
 import com.be.croffle.common.utils.ApiResponseGenerator;
-import com.be.croffle.member.oauth.OAuthTokenService;
-import com.be.croffle.member.oauth.dto.AccessTokenResponse;
+import com.be.croffle.member.oauth.service.OAuthTokenService;
+import com.be.croffle.member.oauth.dto.response.AccessTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

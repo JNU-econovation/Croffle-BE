@@ -1,4 +1,4 @@
-package com.be.croffle.feign;
+package com.be.croffle.feign.common;
 
 import feign.Logger;
 import org.springframework.cloud.openfeign.EnableFeignClients;

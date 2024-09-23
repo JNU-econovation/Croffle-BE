@@ -1,4 +1,4 @@
-package com.be.croffle.member.oauth.dto;
+package com.be.croffle.member.oauth.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

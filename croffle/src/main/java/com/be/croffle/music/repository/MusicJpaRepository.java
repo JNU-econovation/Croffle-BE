@@ -1,5 +1,6 @@
-package com.be.croffle.music;
+package com.be.croffle.music.repository;
 
+import com.be.croffle.music.domain.Music;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

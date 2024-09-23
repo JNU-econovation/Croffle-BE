@@ -1,7 +1,8 @@
-package com.be.croffle.feign;
+package com.be.croffle.feign.oauth;
 
-import com.be.croffle.member.oauth.dto.GoogleOAuthTokenRequest;
-import com.be.croffle.member.oauth.dto.OAuthTokenRequest;
+import com.be.croffle.feign.common.FeignClientConfig;
+import com.be.croffle.member.oauth.dto.request.GoogleOAuthTokenRequest;
+import com.be.croffle.member.oauth.dto.request.OAuthTokenRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

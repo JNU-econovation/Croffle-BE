@@ -1,6 +1,6 @@
 package com.be.croffle.common.security;
 
-import com.be.croffle.member.Member;
+import com.be.croffle.member.domain.Member;
 import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

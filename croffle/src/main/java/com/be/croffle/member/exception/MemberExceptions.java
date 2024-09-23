@@ -1,8 +1,8 @@
 package com.be.croffle.member.exception;
 
 import com.be.croffle.common.security.UserDetailsImpl;
-import com.be.croffle.member.Member;
-import com.be.croffle.member.MemberJpaRepository;
+import com.be.croffle.member.domain.Member;
+import com.be.croffle.member.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

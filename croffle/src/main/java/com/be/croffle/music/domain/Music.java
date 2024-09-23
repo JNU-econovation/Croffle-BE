@@ -1,4 +1,4 @@
-package com.be.croffle.music;
+package com.be.croffle.music.domain;
 
 import com.be.croffle.common.utils.BaseEntity;
 import jakarta.persistence.*;

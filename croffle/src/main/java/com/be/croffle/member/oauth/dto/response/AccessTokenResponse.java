@@ -1,9 +1,8 @@
-package com.be.croffle.member.oauth.dto;
+package com.be.croffle.member.oauth.dto.response;
 
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder

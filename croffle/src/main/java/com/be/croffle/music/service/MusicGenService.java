@@ -1,17 +1,18 @@
-package com.be.croffle.music;
+package com.be.croffle.music.service;
 
 
 import com.be.croffle.common.security.UserDetailsImpl;
-import com.be.croffle.feign.MusicGenWithImageFeignClient;
-import com.be.croffle.feign.MusicGenWithTextFeignClient;
-import com.be.croffle.member.Member;
-import com.be.croffle.member.MemberJpaRepository;
+import com.be.croffle.feign.ai.MusicGenWithImageFeignClient;
+import com.be.croffle.feign.ai.MusicGenWithTextFeignClient;
+import com.be.croffle.member.domain.Member;
+import com.be.croffle.member.repository.MemberJpaRepository;
 import com.be.croffle.member.exception.MemberExceptions;
-import com.be.croffle.music.dto.*;
-import com.be.croffle.music.dto.gen.MusicGenResponseWithImage;
-import com.be.croffle.music.dto.gen.MusicGenResponseWithText;
-import com.be.croffle.music.dto.gen.ServerResponse;
-import com.be.croffle.music.dto.gen.ServerResponseImage;
+import com.be.croffle.music.domain.Music;
+import com.be.croffle.music.dto.gen.request.MusicGenWithTextRequest;
+import com.be.croffle.music.dto.gen.response.MusicGenWithImageResponse;
+import com.be.croffle.music.dto.gen.response.MusicGenWithTextResponse;
+import com.be.croffle.music.dto.gen.response.ServerImageResponse;
+import com.be.croffle.music.dto.gen.response.ServerTextResponse;
 import com.be.croffle.music.dto.playlist.EachMusicResponse;
 import com.be.croffle.music.dto.playlist.MyEachMusicResponse;
 import com.be.croffle.music.dto.playlist.MyPlaylistResponse;
@@ -22,6 +23,7 @@ import com.be.croffle.music.like.Like;
 import com.be.croffle.music.like.LikeJpaRepository;
 import com.be.croffle.music.mymusic.MyMusicJpaRepository;
 import com.be.croffle.music.mymusic.Mymusic;
+import com.be.croffle.music.repository.MusicJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,8 +54,8 @@ public class MusicGenService {
     @Value("${s3.url}")
     private String s3Url;
 
-    public MusicGenResponseWithText genMusicUrl(MusicGenWithTextRequest request, UserDetailsImpl userDetails) {
-        ServerResponse response =  musicGenWithTextFeignClient.generateMusic(request);
+    public MusicGenWithTextResponse genMusicUrl(MusicGenWithTextRequest request, UserDetailsImpl userDetails) {
+        ServerTextResponse response =  musicGenWithTextFeignClient.generateMusic(request);
         String s3Url = response.response().musicURL();
 
         String role = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -63,7 +65,7 @@ public class MusicGenService {
                     .musicUrl(s3Url)
                     .title(request.prompt1())
                     .build());
-            return new MusicGenResponseWithText(s3Url);
+            return new MusicGenWithTextResponse(s3Url);
 
         }
 
@@ -85,12 +87,12 @@ public class MusicGenService {
                             .build());
                 });
 
-        return new MusicGenResponseWithText(s3Url);
+        return new MusicGenWithTextResponse(s3Url);
     }
 
 
-    public MusicGenResponseWithImage genMusicUrlWithImage(MultipartFile image, UserDetailsImpl userDetails) {
-             ServerResponseImage response =  musicGenWithImageFeignClient.generateMusic(image);
+    public MusicGenWithImageResponse genMusicUrlWithImage(MultipartFile image, UserDetailsImpl userDetails) {
+             ServerImageResponse response =  musicGenWithImageFeignClient.generateMusic(image);
             String s3Url = response.musicUrl();
              String title = response.title();
       //  String title = "AI에서 생성된 제목";
@@ -102,7 +104,7 @@ public class MusicGenService {
                     .musicUrl(s3Url)
                     .title(title)
                     .build());
-            return new MusicGenResponseWithImage(s3Url, title);
+            return new MusicGenWithImageResponse(s3Url, title);
 
         }
 
@@ -124,7 +126,7 @@ public class MusicGenService {
                             .build());
                 });
 
-        return new MusicGenResponseWithImage(s3Url, title);
+        return new MusicGenWithImageResponse(s3Url, title);
     }
 
 

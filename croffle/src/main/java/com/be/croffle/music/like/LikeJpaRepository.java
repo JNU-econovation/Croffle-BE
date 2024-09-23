@@ -1,7 +1,7 @@
 package com.be.croffle.music.like;
 
-import com.be.croffle.member.Member;
-import com.be.croffle.music.Music;
+import com.be.croffle.member.domain.Member;
+import com.be.croffle.music.domain.Music;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeJpaRepository extends JpaRepository<Like, Long> {
