@@ -1,0 +1,57 @@
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+ # datasource:
+ #   url: jdbc:h2:tcp://localhost/~/h2db/croffle
+ #   username: sa
+ #   password:
+ #   driver-class-name: org.h2.Driver
+
+  #h2:
+  #  console:
+  #    enabled: true
+  sql:
+    init:
+      data-locations: classpath:data.sql
+      mode: always
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    defer-datasource-initialization: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+feign:
+  url: ${AI_SERVER_URL}
+
+oauth2:
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+    client-secret: ${GOOGLE_CLIENT_SECRET}
+    redirect-uri: ${GOOGLE_REDIRECT_URI}
+    grant-type: ${GOOGLE_GRANT_TYPE}
+    scope:
+      - profile
+      - email
+
+jwt:
+  secret: ${JWT_SECRET}
+
+s3:
+  url: ${S3_URL}
+
+
