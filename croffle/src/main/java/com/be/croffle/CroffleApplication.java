@@ -9,7 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@ImportAutoConfiguration({FeignAutoConfiguration.class})
+//@ImportAutoConfiguration({FeignAutoConfiguration.class})
+@EnableFeignClients(basePackages = "com.be.croffle")
 public class CroffleApplication {
 
 	public static void main(String[] args) {

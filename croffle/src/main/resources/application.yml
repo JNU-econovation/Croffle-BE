@@ -28,7 +28,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
 
     properties:
       hibernate:
@@ -54,4 +54,6 @@ jwt:
 s3:
   url: ${S3_URL}
 
+google:
+  id: ${MY_GOOGLE_ID}
 
