@@ -51,9 +51,3 @@ oauth2:
 jwt:
   secret: ${JWT_SECRET}
 
-s3:
-  url: ${S3_URL}
-
-google:
-  id: ${MY_GOOGLE_ID}
-
